@@ -1,0 +1,9 @@
+{
+    "name": "pagemaster",
+    "description": "Reactive pagination that actually limits records published",
+    "homepage": "http://github.com/sterlingwes/meteor-pagemaster",
+    "author": "Wes Johnson",
+    "version": "0.0.1",
+    "git": "",
+    "packages": {}
+}
