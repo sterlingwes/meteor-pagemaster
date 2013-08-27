@@ -1,6 +1,6 @@
 {
     "name": "pagemaster",
-    "description": "Reactive pagination that actually limits records published",
+    "description": "Reactive pagination module for Meteor that actually limits records published to the client",
     "homepage": "http://github.com/sterlingwes/meteor-pagemaster",
     "author": "Wes Johnson",
     "version": "0.0.1",

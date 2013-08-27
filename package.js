@@ -1,5 +1,5 @@
 Package.describe({
-    summary: "Reactive pagination that actually limits records published"
+    summary: "Reactive pagination module for Meteor that actually limits records published to the client"
 });
 
 Package.on_use(function(api) {
