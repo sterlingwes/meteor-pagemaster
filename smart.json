@@ -4,6 +4,6 @@
     "homepage": "http://github.com/sterlingwes/meteor-pagemaster",
     "author": "Wes Johnson",
     "version": "0.5.0",
-    "git": "",
+    "git": "http://github.com/sterlingwes/meteor-pagemaster",
     "packages": {}
 }
