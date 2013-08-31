@@ -1,5 +1,5 @@
 Package.describe({
-    summary: "Pagination module that actually limits records sent to the client, and provides prefabbed template helpers for manual and infinite scroll loading."
+    summary: "Pagination module for Meteor that actually limits records sent to the client, and provides template wrappers for manual and infinite scroll loading."
 });
 
 Package.on_use(function(api) {

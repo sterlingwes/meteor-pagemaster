@@ -1,6 +1,6 @@
 # Pagemaster
 
-Pagination module that actually limits records sent to the client, and provides prefabbed template helpers for manual and infinite scroll loading.
+Pagination module for Meteor that actually limits records sent to the client, and provides template wrappers for manual and infinite scroll loading.
 
 ### Installation
 
@@ -107,16 +107,17 @@ Similar to `Pagemaster.add()`, `find` and `options` keys are used to find the ap
 #### Pagemaster.template(name, subid, templateCfg)
 #### Pagemaster.template(name, templateCfg)
 
-Wraps the core Meteor `Template.helpers` and `Template.events` in order to streamline common pagination tasks. Provides the following helpers to your template specified with `name`.
+Wraps the core Meteor `Template` for the template you specify in order to streamline common pagination tasks. Provides the following helpers to your template specified with `name`.
 
 *   `{{ pageReady }}`, which is *true* when the subscription is ready
 *   `{{ pageHasEnded }}`, which is *true* when the pagination has ended (all records have been displayed)
 *   `{{ pageTotal }}`, which returns the total number of records that can be loaded
 *   `{{ pageLoaded }}`, which returns the current number of records that have been loaded
+*   `{{ pageInfinite }}`, which serves as the "end of records" marker that triggers scroll-based loading when it comes into view
 
 `subid` indicates the unique subscription for the template. This can be omitted if the same variable is passed to the template's context on render.
 
-`templateCfg` is an object with either `helpers`, `events`, `created`, `rendered`, or `destroyed` keys, with helpers, event handlers, or lifecycle functions as you'd normally specify with `Template.name.whatever`.
+`templateCfg` is an object with either `helpers`, `events`, `created`, `rendered`, or `destroyed` keys, specifying helpers, event handlers, or lifecycle functions as you'd normally specify with `Template.name.whatever`.
 
 ### Todo
 
