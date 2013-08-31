@@ -1,6 +1,6 @@
 # Pagemaster
 
-Plug-and-play pagination module for Meteor that actually limits records published to the client.
+Pagination module that actually limits records sent to the client, and provides prefabbed template helpers for manual and infinite scroll loading.
 
 ### Installation
 
