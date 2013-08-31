@@ -5,7 +5,6 @@ Package.describe({
 Package.on_use(function(api) {
     
     api.use('underscore', 'client');
-    api.use('livedata', 'server');
     api.use('standard-app-packages');
 
     api.export('Pagemaster', 'client');
