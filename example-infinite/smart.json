@@ -1,0 +1,7 @@
+{
+    "packages": {
+        "pagemaster": {
+            "git":  "https://github.com/sterlingwes/meteor-pagemaster.git"
+        }
+    }
+}

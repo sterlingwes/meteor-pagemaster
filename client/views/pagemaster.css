@@ -1,0 +1,10 @@
+#pagemasterCount {
+    position: fixed;
+    right: 10px;
+    bottom: 10px;
+    border-radius: 5px;
+    background: steelblue;
+    opacity: 0.75;
+    color: #fff;
+    padding: 5px 10px;
+}

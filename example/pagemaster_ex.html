@@ -1,0 +1,25 @@
+<head>
+    <title>Pagemaster Example</title>
+</head>
+
+<body>
+    <h1>Pagemaster</h1>
+    <p><i>Example 1: Button as load trigger</i></p>
+    <div class="container">
+        {{> myposts }}
+    </div>
+</body>
+
+<template name="myposts">
+    {{#if pageReady}}
+        <ul>
+        {{#each post}}
+            <li>
+                <h4>Post {{num}}</h4>
+                {{message}}
+            </li>
+        {{/each}}
+        </ul>
+        <div class="button pageMore {{#if pageHasEnded}}hidden{{/if}}">{{pageLoaded}} of {{pageTotal}} - Load More</div>
+    {{/if}}
+</template>

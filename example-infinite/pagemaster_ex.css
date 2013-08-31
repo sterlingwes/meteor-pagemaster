@@ -1,0 +1,35 @@
+body {
+    font-family: 'Arial', sans-serif;
+    font-size: 0.9em;
+    text-align: center;
+    background: #eee;
+    margin: 20px 10px;
+}
+.container {
+    text-align: left;
+    margin: auto;
+    max-width: 600px;
+}
+ul, li {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+li {
+    background: #fff;
+    box-shadow: 1px 1px 0px #ccc;
+    border-radius: 3px;
+    margin-bottom: 15px;
+    padding: 10px;
+}
+h4 {
+    margin: 10px 0;
+}
+#pagemasterMarker {
+    text-align: center;
+}
+hr.tiny {
+    border: 0;
+    border-top: 1px solid #ccc;
+    width: 10%;
+}

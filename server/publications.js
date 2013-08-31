@@ -26,18 +26,18 @@ Meteor.publish('pagemasterCounts', function(params) {
             added: function(doc,idx) {
                 count++;
                 if(!init)
-                    self.changed("counts", uuid, {subid: subid, count:count});
+                    self.changed("pagemaster_counts", uuid, {subid: subid, count:count});
             },
             removed: function(doc,idx) {
                 count--;
-                self.changed("counts", uuid, {subid: subid, count:count});
+                self.changed("pagemaster_counts", uuid, {subid: subid, count:count});
             }
         });
     
     init = false;
     
     //publish initial count
-    self.added("counts", uuid, {subid: subid, count:count});
+    self.added("pagemaster_counts", uuid, {subid: subid, count:count});
     self.ready();
     
     // stop observe when client unsubs

@@ -5,6 +5,11 @@ Pagemaster = (function() {
         initialLimit = {},
         subs = {},
         counts = {},
+        scrollSpot,
+        hasInfiniteListener,
+        markerHeight,
+        
+        countsCollection = new Meteor.Collection("pagemaster_counts"),
         
         LIMIT_KEY = 'pagemaster_limit_',
         
@@ -25,6 +30,42 @@ Pagemaster = (function() {
                     current = current[step];
             });
         });
+    }
+    
+    function pagingHasEnded(subid) {
+        var current = Pagemaster.fetch(subid || this.subid).length,
+            count = Pagemaster.count(subid || this.subid);
+        if(!count) return false;
+        return current >= count;
+    }
+    
+    function isInViewport(el) {
+        // a la Dan @ http://stackoverflow.com/a/7557433
+        
+        if(!el.length) return false;
+        
+        var rect = el[0].getBoundingClientRect();
+        
+        return (
+            rect.top >= 0 &&
+            rect.left >= 0 &&
+            rect.bottom <= $(window).height() &&
+            rect.right <= $(window).width()
+        );
+    }
+    
+    function infiniteTrigger(subid,latency) {
+        return function() {
+            var el = $('#pagemasterMarker');
+            if(!markerHeight)   markerHeight = el.height();
+            if(isInViewport(el)) {
+                if(!pagingHasEnded(subid)) {
+                    Meteor.setTimeout(function() {
+                        Pagemaster.loadMore(subid);
+                    }, latency||50);
+                }
+            }
+        };
     }
     
     return {
@@ -71,6 +112,7 @@ Pagemaster = (function() {
         },
         
         isReady: function(subid) {
+            if(!subs[subid])    return false;
             return subs[subid].ready();
         },
         
@@ -80,16 +122,20 @@ Pagemaster = (function() {
             return window[q.collection].find(q.find, _.omit(q.options,'limit')).fetch();
         },
         
+        Counts: countsCollection,
+        
         count: function(subid) {
-            if(!Pagecounts) return false;
-            var countRec = Pagecounts.findOne({subid:subid});
+            if(!countsCollection) return false;
+            var countRec = countsCollection.findOne({subid:subid});
             if(!countRec)   return false;
             return countRec.count;
         },
         
         loadMore: function(subid, addThisMuch) {
-            if(!currentLimit[subid])    return false;
+            if(!currentLimit[subid] || !subs[subid].ready())
+                return false;
             currentLimit[subid] += addThisMuch || initialLimit[subid];
+            scrollSpot = $('body').scrollTop();
             Session.set(LIMIT_KEY+subid, currentLimit[subid]);
         },
         
@@ -104,8 +150,10 @@ Pagemaster = (function() {
             if(!Template[tplName])
                 return console.warn('No template by the name '+tplName+' found');
             
-            if(!tpl && _.isObject(subid))
+            if(!tpl && _.isObject(subid)) {
                 tpl = subid;
+                subid = null;
+            }
             
             if(_.isObject(tpl)) {
                 if(tpl.helpers) {
@@ -114,20 +162,29 @@ Pagemaster = (function() {
                             return Pagemaster.isReady(this.subid || subid);
                         },
                         pageHasEnded: function() {
-                            var current = Pagemaster.fetch(this.subid || subid).length,
-                                count = Pagemaster.count(this.subid || subid);
-                            if(!count) return false;
-                            return current >= count;
+                            return pagingHasEnded.call(this,subid);
                         },
                         pageTotal: function() {
                             return Pagemaster.count(this.subid || subid);
                         },
                         pageLoaded: function() {
                             return Pagemaster.fetch(this.subid || subid).length;
+                        },
+                        pageInfinite: function() {
+                            var subId = this.subid || subid, that = this;
+                            return new Handlebars.SafeString(Template.pagemaster_infinite_marker({
+                                infiniteLoading: function() {
+                                    return !pagingHasEnded.call(that,subId) && Pagemaster.isReady(subId);
+                                },
+                                pageCount: function() {
+                                    return Pagemaster.fetch(subId).length + " of " + Pagemaster.count(subId)
+                                }
+                            }));
                         }
                     });
                     Template[tplName].helpers(tpl.helpers);
                 }
+                
                 if(tpl.events) {
                     _.extend(tpl.events, {
                         'click .pageMore': function(evt) {
@@ -136,6 +193,43 @@ Pagemaster = (function() {
                     });
                     Template[tplName].events(tpl.events);
                 }
+                
+                Template[tplName].rendered = function() {
+                    if(typeof tpl.rendered === "function")
+                        tpl.rendered.apply(this, arguments);
+                    
+                    if(scrollSpot) {
+                        var scrollOffset = tpl.infinite ? markerHeight+5 : 0;
+                        $('body').scrollTop(scrollSpot-scrollOffset);
+                    }
+                };
+                
+                if(tpl.infinite) {
+                    Template.pagemaster_infinite_marker.rendered = function() {
+                        if(!hasInfiniteListener) {
+                            hasInfiniteListener = true;
+                            $(document).on('ready', infiniteTrigger(subid,tpl.addLatency));
+                            $(window).on('load resize scroll', infiniteTrigger(subid,tpl.addLatency));
+                        }
+                    };
+                    Template.pagemaster_infinite_marker.destroyed = function() {
+                        if(hasInfiniteListener) {
+                            $(document).off('ready', infiniteTrigger(subid,tpl.addLatency));
+                            $(window).off('load resize scroll', infiniteTrigger(subid,tpl.addLatency));
+                            hasInfiniteListener = false;
+                            isLoading = undefined;
+                        }
+                    };
+                }
+                
+                if(typeof tpl.created === "function") {
+                    tpl.created.apply(this, arguments);
+                }
+                
+                Template[tplName].destroyed = function() {
+                    if(typeof tpl.destroyed === "function")
+                        tpl.destroyed.apply(this, arguments);
+                };
             }
         },
         

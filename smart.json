@@ -1,9 +1,9 @@
 {
     "name": "pagemaster",
-    "description": "Reactive pagination module for Meteor that actually limits records published to the client",
+    "description": "Pagination module that actually limits records sent to the client, and provides prefabbed template helpers for manual and infinite scroll loading.",
     "homepage": "http://github.com/sterlingwes/meteor-pagemaster",
     "author": "Wes Johnson",
-    "version": "0.0.1",
+    "version": "0.5.0",
     "git": "",
     "packages": {}
 }

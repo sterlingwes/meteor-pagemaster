@@ -1,0 +1,28 @@
+<head>
+    <title>Pagemaster Example</title>
+</head>
+
+<body>
+    <h1>Pagemaster</h1>
+    <p><i>Example 2: Scrolling as load trigger</i></p>
+    <div class="container">
+        {{> myposts }}
+    </div>
+</body>
+
+<template name="myposts">
+    {{#if pageReady}}
+    
+        <ul>
+        {{#each post}}
+            <li>
+                <h4>Post {{num}}</h4>
+                {{message}}
+            </li>
+        {{/each}}
+        </ul>
+    
+        {{ pageInfinite }}
+    
+    {{/if}}
+</template>
