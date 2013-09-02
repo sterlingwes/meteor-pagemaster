@@ -35,7 +35,7 @@ Pagemaster = (function() {
     function pagingHasEnded(subid) {
         var current = Pagemaster.fetch(subid || this.subid).length,
             count = Pagemaster.count(subid || this.subid);
-        if(!count) return false;
+        if(!count && count!==0) return false;
         return current >= count;
     }
     
