@@ -82,14 +82,19 @@ Pagemaster = (function() {
             queries[subid] = query;
         },
         
-        subscribe: function(subid, update) {
+        subscribe: function(subid, query) {
+            
+            if(_.isFunction(query)) {
+                queries[subid] = query();
+            }
+            else if(_.isObject(query)) {
+                _augment(queries[subid], query);
+            }
+            
+            queries[subid].subid = subid;
             
             if(!queries[subid])
                 return console.warn('No query available for '+subid+' pagemaster subscription');
-            
-            if(_.isObject(update)) {
-                _augment(queries[subid], update);
-            }
             
             counts[subid] = Meteor.subscribe('pagemasterCounts', queries[subid]);
             subs[subid] = Meteor.subscribe('pagemasterRecs', queries[subid], Session.get(LIMIT_KEY+subid), {

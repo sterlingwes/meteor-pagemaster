@@ -17,12 +17,11 @@ Pagemaster comes with:
 *   Augmented queries, so you don't have to specify db query parameters that won't change with each subscription.
 
 ### Example 1 (Button Triggered Loading)
+    
+**1. Subscribe.**
 
-**1. Specify the base query object for your subscription.**
-
-    MyQueries = {
-        
-        posts: function() {
+    Deps.autorun(function() {
+        Pagemaster.subscribe('pagedPosts', function() {
             var from = new Date();
             return {
                 collection: 'Posts',
@@ -34,18 +33,10 @@ Pagemaster comes with:
                     limit:  20
                 }
             };
-        }
-    };
-    
-    Pagemaster.add('pagedPosts', MyQueries.posts());
-    
-**2. Subscribe.**
-
-    Deps.autorun(function() {
-        Pagemaster.subscribe('pagedPosts', {'find/tagged':'rants'});
+        });
     });
     
-**3. Render in your template.**
+**2. Render in your template.**
 
     <template name="myposts">
         {{#if pageReady}}
@@ -58,7 +49,7 @@ Pagemaster comes with:
         {{/if}}
     </template>
     
-**4. Hook up your template.**
+**3. Hook up your template.**
 
     Pagemaster.template('myposts', {
         helpers: {
@@ -79,15 +70,11 @@ See `example-infinite` for more detail.
 
 ### API
 
-#### Pagemaster.add(subid, query[, limit])
+#### Pagemaster.subscribe(subid, query)
 
-Sets up the pagination subscription, where `subid` is a unique identifier and `query` is an object with `find` and/or `options` keys that define the "static" portion of your query.
+Subscribes, returning a subscription handle. `subid` is a unique identifier you reference in the template wiring, and `query` is a function returning a query object with `find`, `options` and `collection` keys..
 
-#### Pagemaster.subscribe(subid, reactiveQuery)
-
-Subscribes, returning a subscription handle. `subid` is the unique identifier you specified in `add()`, and `reactiveQuery` is the part of your query that will change with every subscription.
-
-The `reactive query` is either an ordinary javascript object, or an object with dot notation keys, similar to dot notation queries in MongoDB. Except, Pagemaster expands all queries with forward slashes instead of dots, so that you can pass along dot notation searches to MongoDB.
+If you called the `add` method beforehand, the `query` can be an ordinary javascript object or an object with dot notation keys, similar to dot notation queries in MongoDB. Except, Pagemaster expands all queries with forward slashes instead of dots, so that you can pass along dot notation searches to MongoDB. This augments the query object provided to `add`.
 
 For example:
 
@@ -102,9 +89,14 @@ and:
     { 'find/person.lastname': 'johnson' }
 
 Except that the third query passes along a dot notation search to MongoDB:
+
     { find: { 'person.lastname': 'johnson' } }
     
 Similar to `Pagemaster.add()`, `find` and `options` keys are used to find the appropriate records server-side, and must be separated with a forward slash when using this notation.
+
+#### Pagemaster.add(subid, query[, limit])
+
+Sets up the pagination subscription, where `subid` is a unique identifier and `query` is an object with `find` and/or `options` keys that define the "static" portion of your query. This method is not necessary if you provide a function to subscribe for a reactive query.
 
 #### Pagemaster.template(name, subid, templateCfg)
 #### Pagemaster.template(name, templateCfg)

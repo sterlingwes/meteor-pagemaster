@@ -6,7 +6,7 @@ Meteor.publish('pagemasterRecs', function(params, limit) {
     check(params.collection, String);
 
     var recs = global[params.collection].find(find, options);
-    //console.log('sub for', params.subid, recs.count(), limit);
+    //console.log('sub for', params.subid, recs.count(), find, limit);
     return recs;
 });
 
