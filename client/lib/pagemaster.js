@@ -206,6 +206,7 @@ Pagemaster = (function() {
                     if(scrollSpot) {
                         var scrollOffset = tpl.infinite ? markerHeight+5 : 0;
                         $('body').scrollTop(scrollSpot-scrollOffset);
+                        scrollSpot = 0;
                     }
                 };
                 
