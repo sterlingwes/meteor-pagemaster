@@ -22,7 +22,7 @@ Meteor.publish('pagemasterCounts', function(params) {
         init = true,
         self = this,
         uuid = Random.id(),
-        handle = global[collection].find(find).observeChanges({
+        handle = global[collection].find(find, {fields:{_id:1}}).observeChanges({
             added: function(doc,idx) {
                 count++;
                 if(!init)

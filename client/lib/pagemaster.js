@@ -235,6 +235,9 @@ Pagemaster = (function() {
                 Template[tplName].destroyed = function() {
                     if(typeof tpl.destroyed === "function")
                         tpl.destroyed.apply(this, arguments);
+						
+					// we need to stop our subs, especially the count pub which uses observe(), to free up resources
+					Pagemaster.stop(this.subid || subid);
                 };
             }
         },
