@@ -164,15 +164,19 @@ Pagemaster = (function() {
                 if(tpl.helpers) {
                     _.extend(tpl.helpers, {
                         pageReady: function() {
+                            if(this.nopaging)   return true;
                             return Pagemaster.isReady(this.subid || subid);
                         },
                         pageHasEnded: function() {
+                            if(this.nopaging)   return true;
                             return pagingHasEnded.call(this,subid);
                         },
                         pageTotal: function() {
+                            //if(this.nopaging)   return 1;
                             return Pagemaster.count(this.subid || subid);
                         },
                         pageLoaded: function() {
+                            //if(this.nopaging)   return 1;
                             return Pagemaster.fetch(this.subid || subid).length;
                         },
                         pageInfinite: function() {
