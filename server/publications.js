@@ -1,5 +1,6 @@
 Meteor.publish('pagemasterRecs', function(params, limit) {
-    check(params, Object);    
+    check(params, Object);
+    check(limit, Number);    
     find = params.find || {};
     options = params.options || {};
     options.limit = limit;
