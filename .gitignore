@@ -1,1 +1,4 @@
 .build*
+example/.meteor/
+example-infinite/.meteor/
+
