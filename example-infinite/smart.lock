@@ -1,0 +1,15 @@
+{
+  "meteor": {},
+  "dependencies": {
+    "basePackages": {
+      "pagemaster": {
+        "path": ".."
+      }
+    },
+    "packages": {
+      "pagemaster": {
+        "path": ".."
+      }
+    }
+  }
+}
