@@ -66,6 +66,10 @@ Similar to example 1, except in the `Pagemaster.template()` wiring, specify `inf
 
 See `example-infinite` for more detail.
 
+### Reactivity & Redraw
+
+Pagemaster subscribes to your data set as you would with any normal `Meteor.subscribe` and therefore is reactive. It's also a simple template wrapper of the one you designate, as depicted in the first example above. Any changes to the underlying data in your template will trigger a 'redraw' consistent with what would happen in Meteor anyways. For example, you should keep this in mind when attaching third party libraries or events to the DOM in the `rendered()` callback.
+
 ### API
 
 #### Pagemaster.subscribe(subid, query)
