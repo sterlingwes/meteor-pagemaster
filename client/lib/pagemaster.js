@@ -1,4 +1,4 @@
-Pagemaster = (function() {
+Pagemaster = (function(window) {
 
     var queries = {},
         currentLimit = {},
@@ -84,10 +84,13 @@ Pagemaster = (function() {
         
         subscribe: function(subid, query) {
             
+            // save our query object so we can reference it later
             if(_.isFunction(query)) {
                 queries[subid] = query();
             }
+            // if it's an object...
             else if(_.isObject(query)) {
+                queries[subid] = queries[subid] || {};
                 _augment(queries[subid], query);
             }
             
@@ -104,7 +107,7 @@ Pagemaster = (function() {
                 },
                 
                 onError: function(err) {
-                    if(debug)  console.warn('Pagemaster sub onError for '+queries[subid].collection, err);
+                    if(debug)  console.warn('Pagemaster sub onError for '+queries[subid].collection, err, queries[subid], Session.get(LIMIT_KEY+subid));
                 }
                 
             });
@@ -257,4 +260,4 @@ Pagemaster = (function() {
             console.log(queries[subid]);
         }
     };
-})();
+})(window);
