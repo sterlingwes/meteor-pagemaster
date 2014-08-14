@@ -1,7 +1,5 @@
 # Pagemaster
 
-[Live Example at pagemaster.meteor.com](http://pagemaster.meteor.com)
-
 Pagination module for Meteor that actually limits records sent to the client, and provides template wrappers for manual and infinite scroll loading.
 
 ### Installation
